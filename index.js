@@ -13,15 +13,18 @@ server.post("/api/users", (req, res) => {
   // get the users from the database by ID
 
   const usersDetails = req.body;
+  //If the request body is missing the name or bio property:
   if (!req.body.name || !req.body.bio) {
     req
       .status(400)
       .json({ errorMessage: "Please provide name and bio for the user." });
+     //If the information about the user is valid: 
   } else {
     Users.insert(usersDetails)
       .then(users => {
         res.status(201).json(users);
       })
+      //If there's an error while saving the user:
       .catch(err => {
         console.log(err);
         res.status(500).json({
@@ -51,6 +54,7 @@ server.get("/api/users/:id", (req, res) => {
   // get the users from the database by ID
   Users.findById(req.params.id)
     .then(users => {
+        //If the user with the specified id is not found:
       if (users === undefined) {
         res
           .status(404)
@@ -59,6 +63,7 @@ server.get("/api/users/:id", (req, res) => {
         res.status(200).json(user);
       }
     })
+    //If there's an error in retrieving the user from the database:
     .catch(err => {
       console.log(err);
       res
@@ -71,14 +76,17 @@ server.get("/api/users/:id", (req, res) => {
 server.delete("/api/user/:id", (req, res) => {
   Users.remove(req.params.id)
     .then(removed => {
+        //If the user with the specified id is not found:
       if (removed === undefined) {
         res.status(404).json({ message: "The user with the specified ID does not exist." });
+        //
       } else {
         res.status(200).json(removed);
       }
     })
     .catch(err => {
       console.log(err);
+      //If there's an error in removing the user from the database:
       res.status(500).json({ errorMessage: "The user could not be removed" });
     });
 });
