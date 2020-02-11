@@ -15,7 +15,21 @@ server.get('/api/users', (req, res)=>{
         res.status(200).json(users);
     }).catch(err =>{
         console.log(err);
-        res.status(500).json({errorMessage: 'sorry about that'})
+        res.status(500).json({ errorMessage: "The users information could not be retrieved." })
+    });
+    
+})
+
+//findById
+server.get('/api/users/:id', (req, res)=>{
+    // get the users from the database by ID
+    Users.findById(req.params.id).then(users => {
+        if (users === undefined) {
+            res.status(404).json('The user')
+        }
+    }).catch(err =>{
+        console.log(err);
+        res.status(400).json({ message: "The user with the specified ID does not exist." })
     });
     
 })
