@@ -25,11 +25,13 @@ server.get('/api/users/:id', (req, res)=>{
     // get the users from the database by ID
     Users.findById(req.params.id).then(users => {
         if (users === undefined) {
-            res.status(404).json('The user')
+            res.status(404).json({ message: "The user with the specified ID does not exist." })
+        } else{
+            res.status(200).json(user)       
         }
     }).catch(err =>{
         console.log(err);
-        res.status(400).json({ message: "The user with the specified ID does not exist." })
+        res.status(500).json({ errorMessage: "The user information could not be retrieved." })
     });
     
 })
